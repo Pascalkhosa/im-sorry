@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Looping Love Message</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #1a1a1a, #333);
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .message-box {
+      font-size: 2em;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    /* Falling hearts */
+    .heart {
+      position: absolute;
+      top: -50px;
+      width: 30px;
+      height: 30px;
+      background-color: pink;
+      transform: rotate(45deg);
+      animation: fall linear infinite;
+      opacity: 0.8;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -15px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -15px;
+      top: 0;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(45deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(110vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Music -->
+  <audio autoplay loop>
+    <source src="adele_hello.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Message Display -->
+  <div class="message-box" id="messageBox"></div>
+
+  <!-- Falling hearts -->
+  <script>
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+
+    setInterval(createHeart, 300);
+  </script>
+
+  <!-- Message Loop Logic -->
+  <script>
+    const messages = ["I'm sorry.", "I miss you.", "And I love you."];
+    const box = document.getElementById("messageBox");
+    let loopCount = 0;
+    let index = 0;
+
+    function showMessage() {
+      box.style.opacity = 0;
+
+      setTimeout(() => {
+        box.textContent = messages[index];
+        box.style.opacity = 1;
+
+        index++;
+        if (index >= messages.length) {
+          index = 0;
+          loopCount++;
+        }
+
+        if (loopCount < 10) {
+          setTimeout(showMessage, 5000); // Each message stays 5 seconds
+        } else {
+          box.textContent = "❤️";
+        }
+      }, 500); // Fade-out before next message
+    }
+
+    showMessage();
+  </script>
+</body>
+</html>
